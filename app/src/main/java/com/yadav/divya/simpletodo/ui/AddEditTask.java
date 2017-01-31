@@ -33,9 +33,9 @@ public class AddEditTask extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.add_edit, container);
+        View view =  inflater.inflate(R.layout.add_edit, container, false);
 
-        mEditText = (EditText) view.findViewById(R.id.task_title);
+        mEditText = (EditText) view.findViewById(R.id.title);
 
         final Button button = (Button) view.findViewById(R.id.save);
 

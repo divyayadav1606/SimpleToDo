@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import com.wdullaer.swipeactionadapter.SwipeActionAdapter;
 import com.wdullaer.swipeactionadapter.SwipeDirection;
+
 import com.yadav.divya.simpletodo.R;
 import com.yadav.divya.simpletodo.adapter.TodoAdapter;
 import com.yadav.divya.simpletodo.data.DbHelper;
@@ -18,7 +19,6 @@ public class MainActivity extends AppCompatActivity implements
         SwipeActionAdapter.SwipeActionListener{
 
     protected SwipeActionAdapter mAdapter;
-    private TodoAdapter mtodoAdapter;
     private Cursor mCursor;
     private ListView mList;
     private DbHelper mDbHelper;
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements
         mCursor = mDbHelper.getWritableDatabase().rawQuery("SELECT  * FROM TASK_LIST", null);
 
         mList = (ListView) findViewById(R.id.list);
-        mtodoAdapter = new TodoAdapter(this, mCursor, 0);
+        TodoAdapter mtodoAdapter = new TodoAdapter(this, mCursor, 0);
 
         mAdapter = new SwipeActionAdapter(mtodoAdapter);
         mAdapter.setSwipeActionListener(MainActivity.this)
@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements
 
         mList.setAdapter(mAdapter);
 
-        // Set backgrounds for the swipe directions
         mAdapter.addBackground(SwipeDirection.DIRECTION_NORMAL_LEFT,R.layout.row_bg_left)
                 .addBackground(SwipeDirection.DIRECTION_NORMAL_RIGHT,R.layout.row_bg_right);
 
@@ -56,16 +55,16 @@ public class MainActivity extends AppCompatActivity implements
         ContentValues values = new ContentValues();
         values.clear();
 
-        values.put("task", task);
-        values.put("status", "0");
-        mDbHelper.getWritableDatabase().insertWithOnConflict("TASK_LIST", null, values, SQLiteDatabase.CONFLICT_IGNORE);
+        values.put(DbHelper.COLUMN_TASK, task);
+        values.put(DbHelper.COLUMN_PRIORITY, 0);
+        values.put(DbHelper.COLUMN_STATUS, 0);
+        mDbHelper.getWritableDatabase().insertWithOnConflict(DbHelper.TABLE_NAME,
+                null, values, SQLiteDatabase.CONFLICT_IGNORE);
     }
 
     @Override
     public boolean hasActions(int position, SwipeDirection direction) {
-        if(direction.isLeft() || direction.isRight() )
-            return true;
-        return false;
+        return direction.isLeft() || direction.isRight();
     }
 
     @Override
@@ -86,14 +85,20 @@ public class MainActivity extends AppCompatActivity implements
             switch (direction) {
                 case DIRECTION_FAR_LEFT:
                     ContentValues values = new ContentValues();
-                    values.put("status", "1");
-                    mDbHelper.getWritableDatabase().update("TASK_LIST", values, where, null);
+
+                    if (c.getString(2).equals("0")) {
+                        values.put("status", "1");
+                    } else {
+                        values.put("status", "0");
+                    }
+                    mDbHelper.getWritableDatabase().update(DbHelper.TABLE_NAME, values, where, null);
+                    refreshUI();
                     break;
                 case DIRECTION_NORMAL_LEFT:
                 case DIRECTION_NORMAL_RIGHT:
                     break;
                 case DIRECTION_FAR_RIGHT:
-                    mDbHelper.getWritableDatabase().delete("TASK_LIST", where, null);
+                    mDbHelper.getWritableDatabase().delete(DbHelper.TABLE_NAME, where, null);
                     refreshUI();
                     break;
             }

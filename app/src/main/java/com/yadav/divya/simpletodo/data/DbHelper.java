@@ -12,7 +12,21 @@ public class DbHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     static final String DATABASE_NAME = "SIMPLETODO_DB";
-    static final String TABLE_NAME = "TASK_LIST";
+    public static final String TABLE_NAME = "TASK_LIST";
+    public static final String COLUMN_TASK = "task";
+    public static final String COLUMN_PRIORITY = "priority";
+    public static final String COLUMN_STATUS = "status";
+
+    public enum Priority {
+        LOW_PRIORITY,
+        NORMAL_PRIORITY,
+        HIGH_PRIORITY
+    }
+
+    public enum Status {
+        STATUS_INCOMPLETE,
+        STATUS_COMPLETE
+    }
 
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -22,8 +36,9 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String SQL_CREATE_TODO_TABLE  = "create table "
                 + TABLE_NAME + "('_id' INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + "task TEXT NOT NULL,"
-                + "status TEXT NOT NULL);";
+                + COLUMN_TASK + " TEXT NOT NULL, "
+                + COLUMN_PRIORITY + " INTEGER, "
+                + COLUMN_STATUS + " INTEGER);";
         db.execSQL(SQL_CREATE_TODO_TABLE);
     }
 

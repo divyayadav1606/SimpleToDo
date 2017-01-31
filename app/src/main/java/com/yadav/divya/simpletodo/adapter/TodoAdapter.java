@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.yadav.divya.simpletodo.R;
+import com.yadav.divya.simpletodo.data.DbHelper;
 
 /**
  * Created by dyadav1 on 1/24/2017.
@@ -39,6 +40,9 @@ public class TodoAdapter extends CursorAdapter {
             return;
 
         TextView item = (TextView) view.findViewById(R.id.item);
-        item.setText(cursor.getString(cursor.getColumnIndexOrThrow("task")));
+        item.setText(cursor.getString(cursor.getColumnIndexOrThrow(DbHelper.COLUMN_TASK)));
+
+        //if(cursor.getString(2).equals("1"))
+        //    item.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
     }
 }
