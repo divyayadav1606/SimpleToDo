@@ -7,10 +7,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.wdullaer.swipeactionadapter.SwipeActionAdapter;
 import com.wdullaer.swipeactionadapter.SwipeDirection;
-
 import com.yadav.divya.simpletodo.R;
 import com.yadav.divya.simpletodo.adapter.TodoAdapter;
 import com.yadav.divya.simpletodo.data.DbHelper;
@@ -32,6 +32,9 @@ public class MainActivity extends AppCompatActivity implements
         mCursor = mDbHelper.getWritableDatabase().rawQuery("SELECT  * FROM TASK_LIST", null);
 
         mList = (ListView) findViewById(R.id.list);
+        TextView emptyText = (TextView)findViewById(android.R.id.empty);
+        mList.setEmptyView(emptyText);
+
         TodoAdapter mtodoAdapter = new TodoAdapter(this, mCursor, 0);
 
         mAdapter = new SwipeActionAdapter(mtodoAdapter);
