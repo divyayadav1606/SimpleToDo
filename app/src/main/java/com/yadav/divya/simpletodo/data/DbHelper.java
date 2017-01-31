@@ -11,9 +11,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DbHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
+    static final String DATABASE_NAME = "SIMPLETODO_DB";
+    static final String TABLE_NAME = "TASK_LIST";
 
-    static final String DATABASE_NAME = "simpletodo.db";
-    static final String TABLE_NAME = "todo";
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -22,7 +22,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String SQL_CREATE_TODO_TABLE  = "create table "
                 + TABLE_NAME + "('_id' INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + "item TEXT NOT NULL,"
+                + "task TEXT NOT NULL,"
                 + "status TEXT NOT NULL);";
         db.execSQL(SQL_CREATE_TODO_TABLE);
     }

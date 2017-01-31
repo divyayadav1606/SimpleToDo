@@ -22,6 +22,13 @@ public class TodoAdapter extends CursorAdapter {
     }
 
     @Override
+    protected void onContentChanged() {
+        // TODO Auto-generated method stub
+        super.onContentChanged();
+        notifyDataSetChanged();
+    }
+
+    @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         return LayoutInflater.from(context).inflate(R.layout.list_item, parent, false);
     }
@@ -32,6 +39,6 @@ public class TodoAdapter extends CursorAdapter {
             return;
 
         TextView item = (TextView) view.findViewById(R.id.item);
-        item.setText(cursor.getString(cursor.getColumnIndexOrThrow("item")));
+        item.setText(cursor.getString(cursor.getColumnIndexOrThrow("task")));
     }
 }

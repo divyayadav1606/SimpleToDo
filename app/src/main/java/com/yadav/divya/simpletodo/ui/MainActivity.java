@@ -1,19 +1,15 @@
-package com.yadav.divya.simpletodo.activity;
+package com.yadav.divya.simpletodo.ui;
 
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import com.wdullaer.swipeactionadapter.SwipeActionAdapter;
 import com.wdullaer.swipeactionadapter.SwipeDirection;
-
 import com.yadav.divya.simpletodo.R;
 import com.yadav.divya.simpletodo.adapter.TodoAdapter;
 import com.yadav.divya.simpletodo.data.DbHelper;
@@ -22,6 +18,9 @@ public class MainActivity extends AppCompatActivity implements
         SwipeActionAdapter.SwipeActionListener{
 
     protected SwipeActionAdapter mAdapter;
+    private TodoAdapter mtodoAdapter;
+    private Cursor mCursor;
+    private ListView mList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,16 +28,17 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         DbHelper dbHelper = new DbHelper(this.getApplicationContext());
-        Cursor cursor = dbHelper.getWritableDatabase().rawQuery("SELECT  * FROM todo", null);
+        mCursor = dbHelper.getWritableDatabase().rawQuery("SELECT  * FROM TASK_LIST", null);
 
-        ListView list = (ListView) findViewById(R.id.list);
-        TodoAdapter todoAdapter = new TodoAdapter(this, cursor, 0);
+        mList = (ListView) findViewById(R.id.list);
+        mtodoAdapter = new TodoAdapter(this, mCursor, 0);
 
-        mAdapter = new SwipeActionAdapter(todoAdapter);
+        mAdapter = new SwipeActionAdapter(mtodoAdapter);
         mAdapter.setSwipeActionListener(MainActivity.this)
                 .setDimBackgrounds(true)
-                .setListView(list);
-        list.setAdapter(mAdapter);
+                .setListView(mList);
+
+        mList.setAdapter(mAdapter);
 
         // Set backgrounds for the swipe directions
         mAdapter.addBackground(SwipeDirection.DIRECTION_NORMAL_LEFT,R.layout.row_bg_left)
@@ -46,20 +46,7 @@ public class MainActivity extends AppCompatActivity implements
 
         findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                final EditText taskEditText = new EditText(MainActivity.this);
-                AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
-                        .setTitle("Add Task")
-                        .setView(taskEditText)
-                        .setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String task = String.valueOf(taskEditText.getText());
-                                updateDb(task);
-                            }
-                        })
-                        .setNegativeButton("Cancel", null)
-                        .create();
-                dialog.show();
+                showEditDialog();
             }
         });
     }
@@ -69,9 +56,9 @@ public class MainActivity extends AppCompatActivity implements
         ContentValues values = new ContentValues();
         values.clear();
 
-        values.put("item", task);
+        values.put("task", task);
         values.put("status", "0");
-        dbHelper.getWritableDatabase().insertWithOnConflict("todo", null, values, SQLiteDatabase.CONFLICT_IGNORE);
+        dbHelper.getWritableDatabase().insertWithOnConflict("TASK_LIST", null, values, SQLiteDatabase.CONFLICT_IGNORE);
     }
 
     @Override
@@ -89,5 +76,21 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onSwipe(int[] position, SwipeDirection[] direction) {
 
+    }
+
+    private void showEditDialog() {
+        AddEditTask dFragment = new AddEditTask();
+
+        dFragment.setFinishDialogListener(new AddEditTask.AddEditTaskListener() {
+            @Override
+            public void onFinishDialog(String task) {
+                updateDb(task);
+                mCursor.requery();
+                mAdapter.notifyDataSetChanged();
+                mList.setAdapter(mAdapter);
+            }
+        });
+
+        dFragment.show(getSupportFragmentManager(), "");
     }
 }
