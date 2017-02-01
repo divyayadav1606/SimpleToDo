@@ -15,6 +15,8 @@ import com.yadav.divya.simpletodo.R;
 import com.yadav.divya.simpletodo.adapter.TodoAdapter;
 import com.yadav.divya.simpletodo.data.DbHelper;
 
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity implements
         SwipeActionAdapter.SwipeActionListener{
 
@@ -54,13 +56,14 @@ public class MainActivity extends AppCompatActivity implements
         });
     }
 
-    private void addToDb(String task) {
+    private void addToDb(String task, String priority, Date date) {
         ContentValues values = new ContentValues();
         values.clear();
 
         values.put(DbHelper.COLUMN_TASK, task);
-        values.put(DbHelper.COLUMN_PRIORITY, 0);
+        values.put(DbHelper.COLUMN_PRIORITY, priority);
         values.put(DbHelper.COLUMN_STATUS, 0);
+        values.put(DbHelper.COLUMN_DATE, date.getTime());
         mDbHelper.getWritableDatabase().insertWithOnConflict(DbHelper.TABLE_NAME,
                 null, values, SQLiteDatabase.CONFLICT_IGNORE);
     }
@@ -89,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements
                 case DIRECTION_FAR_LEFT:
                     ContentValues values = new ContentValues();
 
-                    if (c.getString(2).equals("0")) {
+                    if (c.getString(3).equals("0")) {
                         values.put("status", "1");
                     } else {
                         values.put("status", "0");
@@ -113,8 +116,8 @@ public class MainActivity extends AppCompatActivity implements
 
         dFragment.setFinishDialogListener(new AddEditTask.AddEditTaskListener() {
             @Override
-            public void onFinishDialog(String task) {
-                addToDb(task);
+            public void onFinishDialog(String task, String priority, Date date) {
+                addToDb(task, priority, date);
                 refreshUI();
             }
         });

@@ -3,11 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/priority_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:paddingRight="5dp"
+        android:layout_gravity="center_vertical|center_horizontal"/>
+
     <TextView
         android:id="@+id/item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:minHeight="?android:attr/listPreferredItemHeight"
+        android:minHeight="?android:attr/listPreferredItemHeightSmall"
         android:gravity="left|center"
         android:textSize="18sp"/>
 

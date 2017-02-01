@@ -6,13 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_vertical_margin"
     tools:context="com.yadav.divya.simpletodo.ui.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <ListView
             android:id="@+id/list"
@@ -27,7 +27,8 @@
             android:layout_height="match_parent"
             android:textAlignment="center"
             android:gravity="center_vertical"
-            android:text="You have no tasks" />
+            android:text="You have no tasks"
+            android:textSize="24sp"/>
 
     </LinearLayout>
 

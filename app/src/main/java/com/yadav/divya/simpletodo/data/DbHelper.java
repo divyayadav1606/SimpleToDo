@@ -16,17 +16,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String COLUMN_TASK = "task";
     public static final String COLUMN_PRIORITY = "priority";
     public static final String COLUMN_STATUS = "status";
-
-    public enum Priority {
-        LOW_PRIORITY,
-        NORMAL_PRIORITY,
-        HIGH_PRIORITY
-    }
-
-    public enum Status {
-        STATUS_INCOMPLETE,
-        STATUS_COMPLETE
-    }
+    public static final String COLUMN_DATE = "date";
 
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -37,8 +27,9 @@ public class DbHelper extends SQLiteOpenHelper {
         String SQL_CREATE_TODO_TABLE  = "create table "
                 + TABLE_NAME + "('_id' INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COLUMN_TASK + " TEXT NOT NULL, "
-                + COLUMN_PRIORITY + " INTEGER, "
-                + COLUMN_STATUS + " INTEGER);";
+                + COLUMN_PRIORITY + " TEXT NOT NULL, "
+                + COLUMN_STATUS + " TEXT NOT NULL, "
+                + COLUMN_DATE + " INTEGER);";
         db.execSQL(SQL_CREATE_TODO_TABLE);
     }
 
