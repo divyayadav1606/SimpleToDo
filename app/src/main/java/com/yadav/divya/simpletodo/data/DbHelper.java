@@ -29,7 +29,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 + COLUMN_TASK + " TEXT NOT NULL, "
                 + COLUMN_PRIORITY + " TEXT NOT NULL, "
                 + COLUMN_STATUS + " TEXT NOT NULL, "
-                + COLUMN_DATE + " INTEGER);";
+                + COLUMN_DATE + " TEXT NOT NULL);";
         db.execSQL(SQL_CREATE_TODO_TABLE);
     }
 

@@ -19,7 +19,6 @@ import com.yadav.divya.simpletodo.data.DbHelper;
 
 public class TodoAdapter extends CursorAdapter {
 
-
     public TodoAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
     }
@@ -45,16 +44,15 @@ public class TodoAdapter extends CursorAdapter {
         item.setText(cursor.getString(cursor.getColumnIndexOrThrow(DbHelper.COLUMN_TASK)));
 
         ImageView img = (ImageView) view.findViewById(R.id.priority_icon);
-
-        if (cursor.getString(2).equals("Low"))
+        int icon_pos = cursor.getColumnIndexOrThrow(DbHelper.COLUMN_PRIORITY);
+        if (cursor.getString(icon_pos).equals("Low"))
             img.setImageResource(R.drawable.low_priority);
-        else if (cursor.getString(2).equals("High"))
+        else if (cursor.getString(icon_pos).equals("High"))
             img.setImageResource(R.drawable.high_priority);
         else
            img.setImageResource(R.drawable.normal_priority);
 
-
-        if(cursor.getString(3).equals("1"))
+        if(cursor.getString(cursor.getColumnIndexOrThrow(DbHelper.COLUMN_STATUS)).equals("1"))
             item.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
     }
 }

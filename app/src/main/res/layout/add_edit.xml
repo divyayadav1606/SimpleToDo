@@ -51,6 +51,18 @@
         android:calendarViewShown="false"
         android:datePickerMode="spinner" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="15dp" />
+
+    <CheckedTextView
+        android:id="@+id/is_complete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checkMark="@null"
+        android:gravity="center"
+        android:text="Mark as complete"/>
+
     <Button
         android:id="@+id/save"
         android:layout_width="match_parent"

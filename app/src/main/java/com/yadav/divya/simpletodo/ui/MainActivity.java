@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -14,8 +15,6 @@ import com.wdullaer.swipeactionadapter.SwipeDirection;
 import com.yadav.divya.simpletodo.R;
 import com.yadav.divya.simpletodo.adapter.TodoAdapter;
 import com.yadav.divya.simpletodo.data.DbHelper;
-
-import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements
         SwipeActionAdapter.SwipeActionListener{
@@ -51,21 +50,42 @@ public class MainActivity extends AppCompatActivity implements
 
         findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                showEditDialog();
+                //Open Dialog Fragment for adding
+                addTask();
             }
         });
-    }
 
-    private void addToDb(String task, String priority, Date date) {
-        ContentValues values = new ContentValues();
-        values.clear();
 
-        values.put(DbHelper.COLUMN_TASK, task);
-        values.put(DbHelper.COLUMN_PRIORITY, priority);
-        values.put(DbHelper.COLUMN_STATUS, 0);
-        values.put(DbHelper.COLUMN_DATE, date.getTime());
-        mDbHelper.getWritableDatabase().insertWithOnConflict(DbHelper.TABLE_NAME,
-                null, values, SQLiteDatabase.CONFLICT_IGNORE);
+        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //Open Dialog Fragment for editing
+                Cursor c = (Cursor) mAdapter.getItem(i);
+                final String where = "_ID = " + c.getString(0);
+
+                AddEditTask dFragment = AddEditTask.newInstance(c.getString(1), c.getString(2), c.getString(3), c.getString(4));
+
+                dFragment.setFinishDialogListener(new AddEditTask.AddEditTaskListener() {
+                    @Override
+                    public void onFinishDialog(String task, String priority, String status, String date) {
+                        //Update DB
+                        ContentValues values = new ContentValues();
+                        values.clear();
+
+                        values.put(DbHelper.COLUMN_TASK, task);
+                        values.put(DbHelper.COLUMN_PRIORITY, priority);
+                        values.put(DbHelper.COLUMN_STATUS, status);
+                        values.put(DbHelper.COLUMN_DATE, date);
+
+                        mDbHelper.getWritableDatabase().update(DbHelper.TABLE_NAME, values, where, null);
+                        refreshUI();
+                    }
+                });
+
+                dFragment.show(getSupportFragmentManager(), "");
+            }
+        });
     }
 
     @Override
@@ -83,10 +103,9 @@ public class MainActivity extends AppCompatActivity implements
         for (int i = 0; i < positionList.length; i++) {
             SwipeDirection direction = directionList[i];
             int position = positionList[i];
-            String where = "";
 
             Cursor c = (Cursor) mAdapter.getItem(position);
-            where = "_ID = " + c.getString(0);
+            String where = "_ID = " + c.getString(0);
 
             switch (direction) {
                 case DIRECTION_FAR_LEFT:
@@ -111,13 +130,21 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    private void showEditDialog() {
-        AddEditTask dFragment = new AddEditTask();
+    private void addTask() {
+        AddEditTask dFragment = AddEditTask.newInstance(null, null, null, null);
 
         dFragment.setFinishDialogListener(new AddEditTask.AddEditTaskListener() {
             @Override
-            public void onFinishDialog(String task, String priority, Date date) {
-                addToDb(task, priority, date);
+            public void onFinishDialog(String task, String priority, String status, String date) {
+                ContentValues values = new ContentValues();
+                values.clear();
+
+                values.put(DbHelper.COLUMN_TASK, task);
+                values.put(DbHelper.COLUMN_PRIORITY, priority);
+                values.put(DbHelper.COLUMN_STATUS, status);
+                values.put(DbHelper.COLUMN_DATE, date);
+                mDbHelper.getWritableDatabase().insertWithOnConflict(DbHelper.TABLE_NAME,
+                        null, values, SQLiteDatabase.CONFLICT_IGNORE);
                 refreshUI();
             }
         });
