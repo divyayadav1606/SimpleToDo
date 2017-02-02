@@ -52,7 +52,7 @@ public class TodoAdapter extends CursorAdapter {
         else
            img.setImageResource(R.drawable.normal_priority);
 
-        if(cursor.getString(cursor.getColumnIndexOrThrow(DbHelper.COLUMN_STATUS)).equals("1"))
+        if(cursor.getString(cursor.getColumnIndexOrThrow(DbHelper.COLUMN_STATUS)).equals("true"))
             item.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
     }
 }

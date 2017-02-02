@@ -111,10 +111,10 @@ public class MainActivity extends AppCompatActivity implements
                 case DIRECTION_FAR_LEFT:
                     ContentValues values = new ContentValues();
 
-                    if (c.getString(3).equals("0")) {
-                        values.put("status", "1");
+                    if (c.getString(c.getColumnIndexOrThrow(DbHelper.COLUMN_STATUS)).equals("false")) {
+                        values.put(DbHelper.COLUMN_STATUS, "true");
                     } else {
-                        values.put("status", "0");
+                        values.put(DbHelper.COLUMN_STATUS, "false");
                     }
                     mDbHelper.getWritableDatabase().update(DbHelper.TABLE_NAME, values, where, null);
                     refreshUI();

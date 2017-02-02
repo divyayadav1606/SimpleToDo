@@ -55,13 +55,22 @@
         android:layout_width="match_parent"
         android:layout_height="15dp" />
 
-    <CheckedTextView
-        android:id="@+id/is_complete"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:checkMark="@null"
-        android:gravity="center"
-        android:text="Mark as complete"/>
+        android:orientation="horizontal">
+        <CheckBox
+            android:id="@+id/is_complete"
+            android:layout_width="25dp"
+            android:layout_height="25dp"/>
+        <TextView
+            android:id="@+id/is_complete_text"
+            android:layout_width="wrap_content"
+            android:padding="10dp"
+            android:layout_height="wrap_content"
+            android:text="Mark as complete"
+            android:gravity="center_vertical"/>
+    </LinearLayout>
 
     <Button
         android:id="@+id/save"

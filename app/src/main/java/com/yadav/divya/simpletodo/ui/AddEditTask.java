@@ -6,9 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.yadav.divya.simpletodo.R;
 
@@ -25,7 +27,8 @@ public class AddEditTask extends DialogFragment {
     private EditText mTask;
     private Spinner mPriority;
     private DatePicker mDueDate;
-    private String DATE_FORMAT = "yyyy-MM-dd";
+    private CheckBox mCheck;
+    private TextView mCheckText;
 
     public interface AddEditTaskListener {
         void onFinishDialog(String task, String priority, String status, String date);
@@ -59,10 +62,13 @@ public class AddEditTask extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.add_edit, container, false);
+        String DATE_FORMAT = "yyyy-MM-dd";
         final SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
 
         mTask = (EditText) view.findViewById(R.id.title);
         mTask.setText(getArguments().getString("task", ""));
+
+
 
         mPriority = (Spinner) view.findViewById(R.id.priority);
         String priority = getArguments().getString("priority", "Normal");
@@ -88,6 +94,27 @@ public class AddEditTask extends DialogFragment {
 
         final Button button = (Button) view.findViewById(R.id.save);
 
+        //Checkbox
+        String is_checked = getArguments().getString("status", "false");
+        mCheck = (CheckBox) view.findViewById(R.id.is_complete);
+        mCheckText = (TextView) view.findViewById(R.id.is_complete_text);
+
+        if (is_checked.equals("true")) {
+            mCheck.setChecked(true);
+            mCheckText.setText("Mark as incomplete");
+        }
+
+        mCheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mCheck.isChecked())
+                    mCheckText.setText("Mark as incomplete");
+                else
+                    mCheckText.setText("Mark as complete");
+
+            }
+        });
+
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 dismiss();
@@ -95,7 +122,7 @@ public class AddEditTask extends DialogFragment {
                         mDueDate.getMonth(),
                         mDueDate.getDayOfMonth());
 
-                mListener.onFinishDialog(mTask.getText().toString(), mPriority.getSelectedItem().toString(), "0", sdf.format(date ));
+                mListener.onFinishDialog(mTask.getText().toString(), mPriority.getSelectedItem().toString(), String.valueOf(mCheck.isChecked()), sdf.format(date ));
             }
         });
 
