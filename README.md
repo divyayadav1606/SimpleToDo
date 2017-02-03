@@ -26,6 +26,8 @@ The following **optional** features are implemented:
 The following **additional** features are implemented:
 
 * [x] Display priority of todo item as image in listview
+* [x] Use of SwipeActionAdapter to give swipe option to the user to delete the task on right swipe and chage status from to incomplete/complete on left swipe
+* [x] Dialog Fragment has a checkbox to change the status of the tasks
 
 ## Video Walkthrough 
 
@@ -34,6 +36,9 @@ Here's a walkthrough of implemented user stories:
 <img src='https://github.com/divyayadav1606/SimpleToDo/blob/master/Simpletodo.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
+
+##Notes
+Working on giving a different color to the strikethrough on the completed tasks, but have not been successful yet.
 
 ## License
 
