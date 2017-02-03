@@ -14,9 +14,7 @@ import android.widget.TextView;
 
 import com.yadav.divya.simpletodo.R;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Calendar;
 
 /**
  * Created by dyadav1 on 1/27/2017.
@@ -62,8 +60,6 @@ public class AddEditTask extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.add_edit, container, false);
-        String DATE_FORMAT = "yyyy-MM-dd";
-        final SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
 
         mTask = (EditText) view.findViewById(R.id.title);
         mTask.setText(getArguments().getString("task", ""));
@@ -72,24 +68,27 @@ public class AddEditTask extends DialogFragment {
 
         mPriority = (Spinner) view.findViewById(R.id.priority);
         String priority = getArguments().getString("priority", "Normal");
-        if (priority.equals("Low"))
-            mPriority.setSelection(0);
-        else if (priority.equals("High"))
-            mPriority.setSelection(2);
-        else
-            mPriority.setSelection(1);
+        switch (priority) {
+            case "Low":
+                mPriority.setSelection(0);
+                break;
+            case "High":
+                mPriority.setSelection(2);
+                break;
+            default:
+                mPriority.setSelection(1);
+                break;
+        }
 
         mDueDate = (DatePicker) view.findViewById(R.id.duedate);
         String date = getArguments().getString("date", null);
 
         //convert to a time stamp and update the DatePicker
         if (date != null) {
-            try {
-                Date date2 = sdf.parse(date);
-                mDueDate.updateDate(date2.getYear() + 1900, date2.getMonth(), date2.getDay());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(Long.parseLong(date));
+            mDueDate.updateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH));
         }
 
         final Button button = (Button) view.findViewById(R.id.save);
@@ -101,16 +100,16 @@ public class AddEditTask extends DialogFragment {
 
         if (is_checked.equals("true")) {
             mCheck.setChecked(true);
-            mCheckText.setText("Mark as incomplete");
+            mCheckText.setText(R.string.mark_as_incomplete);
         }
 
         mCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(mCheck.isChecked())
-                    mCheckText.setText("Mark as incomplete");
+                    mCheckText.setText(R.string.mark_as_incomplete);
                 else
-                    mCheckText.setText("Mark as complete");
+                    mCheckText.setText(R.string.mark_as_complete);
 
             }
         });
@@ -118,11 +117,17 @@ public class AddEditTask extends DialogFragment {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 dismiss();
-                Date date = new Date(mDueDate.getYear() - 1900,
-                        mDueDate.getMonth(),
-                        mDueDate.getDayOfMonth());
+                //Set date in milliseconds
+                Calendar date = Calendar.getInstance();
 
-                mListener.onFinishDialog(mTask.getText().toString(), mPriority.getSelectedItem().toString(), String.valueOf(mCheck.isChecked()), sdf.format(date ));
+                date.set(Calendar.DAY_OF_MONTH, mDueDate.getDayOfMonth());
+                date.set(Calendar.MONTH, mDueDate.getMonth());
+                date.set(Calendar.YEAR, mDueDate.getYear());
+
+                mListener.onFinishDialog(mTask.getText().toString(),
+                        mPriority.getSelectedItem().toString(),
+                        String.valueOf(mCheck.isChecked()),
+                        String.valueOf(date.getTimeInMillis()));
             }
         });
 

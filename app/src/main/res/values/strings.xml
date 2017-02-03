@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">SimpleToDo</string>
+    <string name="no_tasks">You have no tasks</string>
+    <string name="mark_as_complete">Mark as complete</string>
+    <string name="save">Save</string>
+    <string name="due_date">Due Date</string>
+    <string name="priority">Priority</string>
+    <string name="title">Title</string>
+    <string name="swipe_to_delete">Swipe to Delete</string>
+    <string name="mark_as_incomplete">Mark as incomplete</string>
+    <string name="change_status">Change status</string>
 </resources>

@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         mDbHelper = new DbHelper(this.getApplicationContext());
-        mCursor = mDbHelper.getWritableDatabase().rawQuery("SELECT  * FROM TASK_LIST", null);
+        mCursor = mDbHelper.getWritableDatabase().rawQuery("SELECT  * FROM TASK_LIST Order By _id desc", null);
 
         mList = (ListView) findViewById(R.id.list);
         TextView emptyText = (TextView)findViewById(android.R.id.empty);

@@ -13,6 +13,9 @@ import android.widget.TextView;
 import com.yadav.divya.simpletodo.R;
 import com.yadav.divya.simpletodo.data.DbHelper;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 /**
  * Created by dyadav1 on 1/24/2017.
  */
@@ -42,6 +45,13 @@ public class TodoAdapter extends CursorAdapter {
 
         TextView item = (TextView) view.findViewById(R.id.item);
         item.setText(cursor.getString(cursor.getColumnIndexOrThrow(DbHelper.COLUMN_TASK)));
+
+        TextView dueDate = (TextView) view.findViewById(R.id.due_date);
+        SimpleDateFormat format = new SimpleDateFormat("EEE MMM d yyyy");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(Long.parseLong(cursor.getString(cursor.getColumnIndexOrThrow(DbHelper.COLUMN_DATE))));
+
+        dueDate.setText(format.format(calendar.getTime()));
 
         ImageView img = (ImageView) view.findViewById(R.id.priority_icon);
         int icon_pos = cursor.getColumnIndexOrThrow(DbHelper.COLUMN_PRIORITY);

@@ -27,7 +27,7 @@
             android:layout_height="match_parent"
             android:textAlignment="center"
             android:gravity="center_vertical"
-            android:text="You have no tasks"
+            android:text="@string/no_tasks"
             android:textSize="24sp"/>
 
     </LinearLayout>
