@@ -38,7 +38,7 @@ Here's a walkthrough of implemented user stories:
 
 Here is a screenshot of the notification:
 
-<img src='https://github.com/divyayadav1606/SimpleToDo/blob/master/Screenshot_20170206-235805%5B1%5D.png' width='' alt='Notification' />
+<img src='https://github.com/divyayadav1606/SimpleToDo/blob/master/Screenshot.png' width='' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
