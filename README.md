@@ -4,7 +4,7 @@
 
 Submitted by: **Divya Yadav**
 
-Time spent: **~7 hours** hours spent in total
+Time spent: **~9 hours** hours spent in total
 
 ## User Stories
 
@@ -25,7 +25,8 @@ The following **optional** features are implemented:
 
 The following **additional** features are implemented:
 
-* [x] Display priority of todo item as image in listview
+* [x] Show notification every 12 hours only for overdue tasks
+* [x] Display priority of todo item as image in listview & add tasks to the top of the list
 * [x] Use of SwipeActionAdapter to give swipe option to the user to delete the task on right swipe and chage status from to incomplete/complete on left swipe
 * [x] Dialog Fragment has a checkbox to change the status of the tasks
 
@@ -34,6 +35,10 @@ The following **additional** features are implemented:
 Here's a walkthrough of implemented user stories:
 
 <img src='https://github.com/divyayadav1606/SimpleToDo/blob/master/Simpletodo.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
+Here is a screenshot of the notification:
+
+<img src='https://github.com/divyayadav1606/SimpleToDo/blob/master/Screenshot_20170206-235805%5B1%5D.png' width='' alt='Notification' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
