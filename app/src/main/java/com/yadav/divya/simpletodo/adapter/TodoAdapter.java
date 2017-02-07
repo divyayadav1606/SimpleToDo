@@ -49,7 +49,7 @@ public class TodoAdapter extends CursorAdapter {
         TextView dueDate = (TextView) view.findViewById(R.id.due_date);
         SimpleDateFormat format = new SimpleDateFormat("EEE MMM d yyyy");
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(Long.parseLong(cursor.getString(cursor.getColumnIndexOrThrow(DbHelper.COLUMN_DATE))));
+        calendar.setTimeInMillis(cursor.getLong(cursor.getColumnIndexOrThrow(DbHelper.COLUMN_DATE)));
 
         dueDate.setText(format.format(calendar.getTime()));
 

@@ -29,7 +29,7 @@ public class AddEditTask extends DialogFragment {
     private TextView mCheckText;
 
     public interface AddEditTaskListener {
-        void onFinishDialog(String task, String priority, String status, String date);
+        void onFinishDialog(String task, String priority, String status, Long date);
     }
 
     private AddEditTaskListener mListener;
@@ -40,7 +40,7 @@ public class AddEditTask extends DialogFragment {
 
     public AddEditTask() {}
 
-    public static AddEditTask newInstance(String task, String priority, String status, String date) {
+    public static AddEditTask newInstance(String task, String priority, String status, Long date) {
         AddEditTask frag = new AddEditTask();
         Bundle args = new Bundle();
         if (task != null)
@@ -50,7 +50,9 @@ public class AddEditTask extends DialogFragment {
         if (status != null)
             args.putString("status", status);
         if (date != null)
-            args.putString("date", date);
+            args.putLong("date", date);
+        else
+            args.putLong("date", System.currentTimeMillis());
 
         frag.setArguments(args);
         return frag;
@@ -63,8 +65,6 @@ public class AddEditTask extends DialogFragment {
 
         mTask = (EditText) view.findViewById(R.id.title);
         mTask.setText(getArguments().getString("task", ""));
-
-
 
         mPriority = (Spinner) view.findViewById(R.id.priority);
         String priority = getArguments().getString("priority", "Normal");
@@ -81,15 +81,13 @@ public class AddEditTask extends DialogFragment {
         }
 
         mDueDate = (DatePicker) view.findViewById(R.id.duedate);
-        String date = getArguments().getString("date", null);
+        Long date = getArguments().getLong("date");
 
         //convert to a time stamp and update the DatePicker
-        if (date != null) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(Long.parseLong(date));
-            mDueDate.updateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                    calendar.get(Calendar.DAY_OF_MONTH));
-        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(date);
+        mDueDate.updateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH));
 
         final Button button = (Button) view.findViewById(R.id.save);
 
@@ -127,7 +125,7 @@ public class AddEditTask extends DialogFragment {
                 mListener.onFinishDialog(mTask.getText().toString(),
                         mPriority.getSelectedItem().toString(),
                         String.valueOf(mCheck.isChecked()),
-                        String.valueOf(date.getTimeInMillis()));
+                        date.getTimeInMillis());
             }
         });
 

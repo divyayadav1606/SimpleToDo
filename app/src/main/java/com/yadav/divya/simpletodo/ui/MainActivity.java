@@ -1,6 +1,9 @@
 package com.yadav.divya.simpletodo.ui;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -15,6 +18,7 @@ import com.wdullaer.swipeactionadapter.SwipeDirection;
 import com.yadav.divya.simpletodo.R;
 import com.yadav.divya.simpletodo.adapter.TodoAdapter;
 import com.yadav.divya.simpletodo.data.DbHelper;
+import com.yadav.divya.simpletodo.publisher.OverdueTaskPublisher;
 
 public class MainActivity extends AppCompatActivity implements
         SwipeActionAdapter.SwipeActionListener{
@@ -64,11 +68,11 @@ public class MainActivity extends AppCompatActivity implements
                 Cursor c = (Cursor) mAdapter.getItem(i);
                 final String where = "_ID = " + c.getString(0);
 
-                AddEditTask dFragment = AddEditTask.newInstance(c.getString(1), c.getString(2), c.getString(3), c.getString(4));
+                AddEditTask dFragment = AddEditTask.newInstance(c.getString(1), c.getString(2), c.getString(3), c.getLong(4));
 
                 dFragment.setFinishDialogListener(new AddEditTask.AddEditTaskListener() {
                     @Override
-                    public void onFinishDialog(String task, String priority, String status, String date) {
+                    public void onFinishDialog(String task, String priority, String status, Long date) {
                         //Update DB
                         ContentValues values = new ContentValues();
                         values.clear();
@@ -86,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements
                 dFragment.show(getSupportFragmentManager(), "");
             }
         });
+        scheduleCheck();
     }
 
     @Override
@@ -135,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements
 
         dFragment.setFinishDialogListener(new AddEditTask.AddEditTaskListener() {
             @Override
-            public void onFinishDialog(String task, String priority, String status, String date) {
+            public void onFinishDialog(String task, String priority, String status, Long date) {
                 ContentValues values = new ContentValues();
                 values.clear();
 
@@ -156,5 +161,16 @@ public class MainActivity extends AppCompatActivity implements
         mCursor.requery();
         mAdapter.notifyDataSetChanged();
         mList.setAdapter(mAdapter);
+    }
+
+    //Setup 12 hour notification
+    private void scheduleCheck() {
+        Intent intent = new Intent(this, OverdueTaskPublisher.class);
+        intent.putExtra("notifyId", 1);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 60000, pendingIntent);
     }
 }

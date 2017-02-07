@@ -9,4 +9,7 @@
     <string name="swipe_to_delete">Swipe to Delete</string>
     <string name="mark_as_incomplete">Mark as incomplete</string>
     <string name="change_status">Change status</string>
+    <string name="notification_str1">"You have "</string>
+    <string name="notification_str2">" pending tasks in your list"</string>
+    <string name="overdue_tasks">Overdue Tasks</string>
 </resources>

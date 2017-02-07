@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DbHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
-    static final String DATABASE_NAME = "SIMPLETODO_DB";
+    private static final String DATABASE_NAME = "SIMPLETODO_DB";
     public static final String TABLE_NAME = "TASK_LIST";
     public static final String COLUMN_TASK = "task";
     public static final String COLUMN_PRIORITY = "priority";
@@ -29,7 +29,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 + COLUMN_TASK + " TEXT NOT NULL, "
                 + COLUMN_PRIORITY + " TEXT NOT NULL, "
                 + COLUMN_STATUS + " TEXT NOT NULL, "
-                + COLUMN_DATE + " TEXT NOT NULL);";
+                + COLUMN_DATE + " INTEGER NOT NULL);";
         db.execSQL(SQL_CREATE_TODO_TABLE);
     }
 
