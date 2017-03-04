@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:title=""
+        android:enabled="false"></item>
+
+    <item
+        android:id="@+id/action_quick_add"
+        android:enabled="true"
+        android:icon="@drawable/text_to_speech"
+        android:title="Quick Add"/>
+
+    <item
+        android:title=""
+        android:enabled="false"></item>
+</menu>

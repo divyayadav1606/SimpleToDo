@@ -8,6 +8,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -52,14 +55,6 @@ public class MainActivity extends AppCompatActivity implements
         mAdapter.addBackground(SwipeDirection.DIRECTION_NORMAL_LEFT,R.layout.row_bg_left)
                 .addBackground(SwipeDirection.DIRECTION_NORMAL_RIGHT,R.layout.row_bg_right);
 
-        findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                //Open Dialog Fragment for adding
-                addTask();
-            }
-        });
-
-
         mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -91,6 +86,25 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
         scheduleCheck();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Take appropriate action for each action item click
+        switch (item.getItemId()) {
+            case R.id.action_add:
+                addTask();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
