@@ -12,4 +12,5 @@
     <string name="notification_str1">"You have "</string>
     <string name="notification_str2">" pending tasks in your list"</string>
     <string name="overdue_tasks">Overdue Tasks</string>
+    <string name="no_support">Device does not support Text-to-Speech</string>
 </resources>
