@@ -30,6 +30,12 @@ The following **additional** features are implemented:
 * [x] Use of SwipeActionAdapter to give swipe option to the user to delete the task on right swipe and chage status from to incomplete/complete on left swipe
 * [x] Dialog Fragment has a checkbox to change the status of the tasks
 
+**New changes after submission**
+* [x] Removes Floating action button and use actionbar menu
+* [x] UI Theme/color/icon changes
+* [x] Add **Text to speech** for quick addition of task
+
+
 ## Video Walkthrough 
 
 Here's a walkthrough of implemented user stories:
