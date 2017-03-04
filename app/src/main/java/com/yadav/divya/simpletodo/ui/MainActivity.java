@@ -2,11 +2,14 @@ package com.yadav.divya.simpletodo.ui;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wdullaer.swipeactionadapter.SwipeActionAdapter;
 import com.wdullaer.swipeactionadapter.SwipeDirection;
@@ -23,6 +27,10 @@ import com.yadav.divya.simpletodo.adapter.TodoAdapter;
 import com.yadav.divya.simpletodo.data.DbHelper;
 import com.yadav.divya.simpletodo.publisher.OverdueTaskPublisher;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity implements
         SwipeActionAdapter.SwipeActionListener{
 
@@ -30,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements
     private Cursor mCursor;
     private ListView mList;
     private DbHelper mDbHelper;
+    private final int RESULT_CODE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +63,20 @@ public class MainActivity extends AppCompatActivity implements
 
         mAdapter.addBackground(SwipeDirection.DIRECTION_NORMAL_LEFT,R.layout.row_bg_left)
                 .addBackground(SwipeDirection.DIRECTION_NORMAL_RIGHT,R.layout.row_bg_right);
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_quick_add:
+                                addTaskByVoice();
+                                break;
+                        }
+                        return false;
+                    }
+                });
 
         mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -186,5 +209,46 @@ public class MainActivity extends AppCompatActivity implements
 
         AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 12*60*60*1000, pendingIntent);
+    }
+
+    private void addTaskByVoice() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+
+        try {
+            startActivityForResult(intent, RESULT_CODE);
+        } catch (ActivityNotFoundException a) {
+            Toast.makeText(getApplicationContext(),getString(R.string.no_support),
+                                        Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case RESULT_CODE: {
+                if (resultCode == RESULT_OK && data != null) {
+
+                    ArrayList<String> result = data
+                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    //Add to DB and Refresh UI
+                    ContentValues values = new ContentValues();
+                    values.clear();
+
+                    Calendar date = Calendar.getInstance();
+
+                    values.put(DbHelper.COLUMN_TASK, result.get(0));
+                    values.put(DbHelper.COLUMN_PRIORITY, "Normal");
+                    values.put(DbHelper.COLUMN_STATUS, "false");
+                    values.put(DbHelper.COLUMN_DATE, date.getTimeInMillis());
+                    mDbHelper.getWritableDatabase().insertWithOnConflict(DbHelper.TABLE_NAME,
+                            null, values, SQLiteDatabase.CONFLICT_IGNORE);
+                    refreshUI();
+                }
+                break;
+            }
+
+        }
     }
 }
