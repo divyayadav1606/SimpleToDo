@@ -40,7 +40,7 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://github.com/divyayadav1606/SimpleToDo/blob/master/Simpletodo.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://github.com/divyayadav1606/SimpleToDo/blob/master/Simpletodo_updated.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 Here is a screenshot of the notification:
 
